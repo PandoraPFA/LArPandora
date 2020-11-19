@@ -29,6 +29,9 @@
 #include "nusimdata/SimulationBase/MCTruth.h"
 
 #include "larcore/Geometry/Geometry.h"
+#include "larcore/Geometry/Geometry.h"
+#include "larcorealg/Geometry/GeometryCore.h"
+#include "larcorealg/Geometry/PlaneGeo.h"
 #include "larcoreobj/SimpleTypesAndConstants/RawTypes.h"
 #include "lardata/DetectorInfoServices/DetectorClocksService.h"
 
@@ -1498,6 +1501,17 @@ namespace lar_pandora {
   LArPandoraHelper::GetPFParticleMetadata(const pandora::ParticleFlowObject* const pPfo)
   {
     return larpandoraobj::PFParticleMetadata(pPfo->GetPropertiesMap());
+  }
+
+  bool
+  LArPandoraHelper::IsDualPhase()
+  {
+    art::ServiceHandle<geo::Geometry const> theGeometry;
+    std::unordered_set<geo::_plane_sigtype> sigtypeSet;
+    for (readout::ROPID const& rID: theGeometry->IterateROPIDs()) {
+      sigtypeSet.insert(theGeometry->SignalType(rID));
+    }
+    return (!(sigtypeSet.count(geo::kInduction) && sigtypeSet.count(geo::kCollection)) && !sigtypeSet.count(geo::kMysteryType));
   }
 
   //------------------------------------------------------------------------------------------------------------------------------------------

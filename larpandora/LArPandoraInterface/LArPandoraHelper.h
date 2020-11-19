@@ -738,6 +738,16 @@ namespace lar_pandora {
      */
     static larpandoraobj::PFParticleMetadata GetPFParticleMetadata(
       const pandora::ParticleFlowObject* const pPfo);
+
+    /**
+     *  @brief  Check if geometry is Dual Phase (i.e. has collection or induction views only)
+     *
+     *  @param  
+     *
+     *  @return true/false
+     */
+    static bool IsDualPhase();
+
   };
 
 } // namespace lar_pandora
